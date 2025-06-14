@@ -1,5 +1,3 @@
-_G.Slot = "1"
-
 if game.PlaceId == 15800296330 then
     task.wait(1)
     local args = {
