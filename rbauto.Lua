@@ -206,7 +206,7 @@ local character = Workspace:WaitForChild(player.Name)
 local humanoid = character:WaitForChild("Humanoid")
 local hrp = character:WaitForChild("HumanoidRootPart")
 
-local glideStrength = 75
+local glideStrength = 65
 
 RunService.RenderStepped:Connect(function(deltaTime)
     local moveDirection = humanoid.MoveDirection
