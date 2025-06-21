@@ -21,7 +21,7 @@ local pingPoints = {
 
 --// Function to calculate NewValue based on ping
 local function calculateNewValue(ping)
-    llocal player = game.Players.LocalPlayer
+    local player = game.Players.LocalPlayer
     local remote = game:GetService("ReplicatedStorage")["Game.Properties"].ClientEvent
     local Stats = game:GetService("Stats")
     
