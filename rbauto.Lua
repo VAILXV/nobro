@@ -320,7 +320,7 @@ local function watchIdleController()
                             timerStart = tick()
                         elseif tick() - timerStart >= 5 then
                             print("Controller idle 5s: moving to 0,4,10")
-                            moveToTarget(Vector3.new(0, 4, 10), 1.5)
+                            moveToTarget(Vector3.new(0, 4, 10), 1.5, true)
                             timerStart = nil -- reset so it doesn't spam move
                         end
                     else
