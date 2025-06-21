@@ -1,4 +1,4 @@
-wait(15)
+wait(22)
 
 local OOB = Workspace:WaitForChild("Map"):WaitForChild("Court"):WaitForChild("OOB")
 OOB:Destroy()
