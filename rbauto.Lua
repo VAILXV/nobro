@@ -13,6 +13,8 @@ OOB:Destroy()
 --autotime
 local remote = game:GetService("ReplicatedStorage")["Game.Properties"].ClientEvent
 local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local shotMeterValue = character:WaitForChild("Properties"):WaitForChild("ShotMeter")
 local shotMeterValue = workspace[player.Name].Properties:WaitForChild("ShotMeter")
 local Stats = game:GetService("Stats")
 
