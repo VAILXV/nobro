@@ -3,7 +3,7 @@ if game.PlaceId == 15800296330 then
         "Get Players"
     }
     game:GetService("ReplicatedStorage"):WaitForChild("MainFunction"):InvokeServer(unpack(args))
-    task.wait(5)
+    task.wait(2)
     local HttpService = game:GetService("HttpService")
     local AnalyticsService = game:GetService("RbxAnalyticsService")
 
