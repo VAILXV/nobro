@@ -11,7 +11,89 @@ local OOB = Workspace:WaitForChild("Map"):WaitForChild("Court"):WaitForChild("OO
 OOB:Destroy()
 
 --autotime
-loadstring(game:HttpGet("https://raw.githubusercontent.com/wwwwdwwwwwredactmanww/deepwokenuserlololol/refs/heads/main/rb",true))()
+local remote = game:GetService("ReplicatedStorage")["Game.Properties"].ClientEvent
+local player = game.Players.LocalPlayer
+local shotMeterValue = workspace[player.Name].Properties:WaitForChild("ShotMeter")
+local Stats = game:GetService("Stats")
+
+--// Variables
+local lastFireTime = 0
+local lastRecalculationTime = 0
+local recalculationCooldown = 2
+
+--// Define ping-to-value mapping
+local pingPoints = {
+    {ping = 30, value = 0.88},
+    {ping = 50, value = 0.82},
+    {ping = 70, value = 0.77},
+    {ping = 90, value = 0.73},
+    {ping = 110, value = 0.61},
+    {ping = 130, value = 0.59},
+    {ping = 150, value = 0.56},
+}
+
+--// Function to calculate NewValue based on ping
+local function calculateNewValue(ping)
+    -- Clamp ping within the points
+    if ping <= pingPoints[1].ping then
+        return pingPoints[1].value
+    elseif ping >= pingPoints[#pingPoints].ping then
+        return pingPoints[#pingPoints].value
+    end
+
+    -- Find the two points ping falls between
+    for i = 1, #pingPoints - 1 do
+        local lower = pingPoints[i]
+        local upper = pingPoints[i+1]
+
+        if ping >= lower.ping and ping <= upper.ping then
+            -- Linear interpolation
+            local alpha = (ping - lower.ping) / (upper.ping - lower.ping)
+            return lower.value + alpha * (upper.value - lower.value)
+        end
+    end
+end
+
+--// Function to update _G.NewValue
+local function updateNewValue()
+    local ping = math.round(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
+    print("Your Ping: " .. ping .. " ms")
+
+    _G.NewValue = calculateNewValue(ping)
+
+    print("Adjusted NewValue: ", _G.NewValue)
+end
+
+--// Function to fire when ShotMeter changes
+local function onChanged()
+    if shotMeterValue.Value ~= 2 then
+        local currentTime = tick()
+
+        if currentTime - lastRecalculationTime >= recalculationCooldown then
+            updateNewValue()
+            lastRecalculationTime = currentTime
+        end
+
+        while shotMeterValue.Value < _G.NewValue do
+            shotMeterValue:GetPropertyChangedSignal("Value"):Wait()
+        end
+
+        if currentTime - lastFireTime >= 1 then
+            local arguments = {
+                [1] = "Shoot",
+                [2] = false
+            }
+            remote:FireServer(unpack(arguments))
+            lastFireTime = currentTime
+        end
+    end
+end
+
+--// Connect to changes
+shotMeterValue:GetPropertyChangedSignal("Value"):Connect(onChanged)
+
+--// Run once immediately
+onChanged()
 
 
 local function getCharacter()
