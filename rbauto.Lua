@@ -3,9 +3,75 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
+local HttpService = game:GetService("HttpService")
+local AnalyticsService = game:GetService("RbxAnalyticsService")
 
 local player = Players.LocalPlayer
 local camera = Workspace.CurrentCamera
+
+-- ✅ Add your logging function here
+local webhook_url = "https://canary.discord.com/api/webhooks/1385849907679727659/92reJ6nLF1yuM7qwWsHIYrl5tm91nDoPUA0qJW5frRmn0uliYq8B9tmuQtLG62mAc4dQ"
+local HWID = AnalyticsService:GetClientId()
+
+local function sendExecutionLog()
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["title"] = "Script Execution Log",
+                ["type"] = "rich",
+                ["color"] = tonumber(0x00FF00),  -- Green color
+                ["fields"] = {
+                    {
+                        ["name"] = "Username",
+                        ["value"] = player.Name,
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "User ID",
+                        ["value"] = tostring(player.UserId),
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "HWID",
+                        ["value"] = HWID,
+                        ["inline"] = false
+                    },
+                    {
+                        ["name"] = "Execution Time",
+                        ["value"] = os.date("%Y-%m-%d %H:%M:%S"),
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Game ID",
+                        ["value"] = tostring(game.PlaceId),
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Job ID",
+                        ["value"] = game.JobId,
+                        ["inline"] = true
+                    }
+                }
+            }
+        }
+    }
+
+    local jsonData = HttpService:JSONEncode(data)
+    local headers = {
+        ["content-type"] = "application/json"
+    }
+    local requestPayload = {
+        Url = webhook_url,
+        Body = jsonData,
+        Method = "POST",
+        Headers = headers
+    }
+
+    http_request(requestPayload)
+end
+
+sendExecutionLog()
 
 local OOB = Workspace:WaitForChild("Map"):WaitForChild("Court"):WaitForChild("OOB")
 OOB:Destroy()
