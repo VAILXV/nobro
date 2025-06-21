@@ -121,27 +121,36 @@ local function moveToTarget(targetPosition, customStopDistance, skipBallCheck)
 
     local stopDistance = customStopDistance or 0.9
 
+    -- Start holding movement keys
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftShift, false, game)
 
     while horizontalDistance(hrp.Position, targetPosition) > stopDistance do
+        -- 🛑 Break if we're not skipping ball check and lost the ball
+        if not skipBallCheck and not hasBallWeld() then
+            break
+        end
+
+        -- 🛑 If we're skipping the ball check (e.g. idle move) but got the ball mid-move, stop idle move
+        if skipBallCheck and hasBallWeld() then
+            break
+        end
+
+        -- Adjust camera to face movement direction
         local direction = (targetPosition - hrp.Position).Unit
         local lookVector = Vector3.new(direction.X, 0, direction.Z)
         camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + lookVector)
 
         RunService.Heartbeat:Wait()
-
-        -- ⛔ Break if no ball, unless we're skipping this check
-        if not skipBallCheck and not hasBallWeld() then
-            break
-        end
     end
 
+    -- Release movement keys
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftShift, false, game)
 
     return true
 end
+
 
 local hcpos = Vector3.new(26.7702923, 4.21903753, 0.00644974224)
 local shooting = Vector3.new(35.5, 4.20903778, 46.6403084, 0.93481499)
