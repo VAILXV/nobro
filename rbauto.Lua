@@ -1,4 +1,4 @@
-local VirtualInputManager = game:GetService("VirtualInputManager")Add commentMore actions
+local VirtualInputManager = game:GetService("VirtualInputManager")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
