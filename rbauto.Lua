@@ -1,12 +1,3 @@
-local VirtualInputManager = game:GetService("VirtualInputManager")
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
-
-local player = Players.LocalPlayer
-local camera = Workspace.CurrentCamera
-
 local OOB = Workspace:WaitForChild("Map"):WaitForChild("Court"):WaitForChild("OOB")
 OOB:Destroy()
 
@@ -94,12 +85,17 @@ end
 shotMeterValue:GetPropertyChangedSignal("Value"):Connect(onChanged)
 
 --// Run once immediately
-task.spawn(function()
-    task.wait(25)
-    onChanged()
-end)
+wait(15)
+onChanged()
 
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
 
+local player = Players.LocalPlayer
+local camera = Workspace.CurrentCamera
 
 local function getCharacter()
     return Workspace:FindFirstChild(player.Name)
