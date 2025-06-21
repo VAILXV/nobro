@@ -1,3 +1,5 @@
+wait(15)
+
 local OOB = Workspace:WaitForChild("Map"):WaitForChild("Court"):WaitForChild("OOB")
 OOB:Destroy()
 
@@ -85,8 +87,6 @@ end
 shotMeterValue:GetPropertyChangedSignal("Value"):Connect(onChanged)
 
 --// Run once immediately
-wait(15)
-
 onChanged()
 
 local VirtualInputManager = game:GetService("VirtualInputManager")
