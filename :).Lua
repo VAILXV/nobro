@@ -6,7 +6,6 @@ if game.PlaceId == 15800296330 then
 
     local HttpService = game:GetService("HttpService")
     local AnalyticsService = game:GetService("RbxAnalyticsService")
-    local webhook_url = "https://discord.com/api/webhooks/1365901085499195493/Dxhb29a0ze-o28pZQJRpGcbBwk7Bz1inrb454lCP3j44pWTeFLWRGfMyea8OvjMaVWl1"
 
     local player = game:GetService("Players").LocalPlayer
     local gui = player:WaitForChild("PlayerGui")
