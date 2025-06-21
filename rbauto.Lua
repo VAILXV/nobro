@@ -93,7 +93,11 @@ end
 shotMeterValue:GetPropertyChangedSignal("Value"):Connect(onChanged)
 
 --// Run once immediately
-onChanged()
+task.spawn(function()
+    task.wait(15)
+    onChanged()
+end)
+
 
 
 local function getCharacter()
