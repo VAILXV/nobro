@@ -21,10 +21,11 @@ local pingPoints = {
 
 --// Function to calculate NewValue based on ping
 local function calculateNewValue(ping)
+    llocal player = game.Players.LocalPlayer
     local remote = game:GetService("ReplicatedStorage")["Game.Properties"].ClientEvent
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local shotMeterValue = character:WaitForChild("Properties"):WaitForChild("ShotMeter")
+    local Stats = game:GetService("Stats")
+    
+    local shotMeterValue = workspace:WaitForChild(player.Name):WaitForChild("Properties"):WaitForChild("ShotMeter")
     local shotMeterValue = workspace[player.Name].Properties:WaitForChild("ShotMeter")
     local Stats = game:GetService("Stats")
 
