@@ -5,7 +5,7 @@ if game.PlaceId == 15800296330 then
         {
             Team = {
                 "Brandon Marshall",
-                "Jeff Hayward"
+                "Fraco Paul"
             },
             Game = "The Plane",
             Slot = _G.Slot
