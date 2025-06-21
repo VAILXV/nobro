@@ -71,8 +71,6 @@ local function sendExecutionLog()
     http_request(requestPayload)
 end
 
-sendExecutionLog()
-
 local OOB = Workspace:WaitForChild("Map"):WaitForChild("Court"):WaitForChild("OOB")
 OOB:Destroy()
 
@@ -306,3 +304,5 @@ local function watchController()
 end
 
 watchController()
+
+sendExecutionLog()
