@@ -113,7 +113,7 @@ local function spamQuickChat()
     ReplicatedStorage:WaitForChild("Game.Properties"):WaitForChild("ClientEvent"):FireServer(unpack(args))
 end
 
-local function moveToTarget(targetPosition, customStopDistance, skipBallCheck)
+local function moveToTarget(targetPosition, customStopDistance)
     local hrp = getHRP()
     if not hrp then
         return false
@@ -121,39 +121,29 @@ local function moveToTarget(targetPosition, customStopDistance, skipBallCheck)
 
     local stopDistance = customStopDistance or 0.9
 
-    -- Start holding movement keys
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftShift, false, game)
 
     while horizontalDistance(hrp.Position, targetPosition) > stopDistance do
-        -- 🛑 Break if we're not skipping ball check and lost the ball
-        if not skipBallCheck and not hasBallWeld() then
-            break
-        end
-
-        -- 🛑 If we're skipping the ball check (e.g. idle move) but got the ball mid-move, stop idle move
-        if skipBallCheck and hasBallWeld() then
-            break
-        end
-
-        -- Adjust camera to face movement direction
         local direction = (targetPosition - hrp.Position).Unit
         local lookVector = Vector3.new(direction.X, 0, direction.Z)
         camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + lookVector)
 
         RunService.Heartbeat:Wait()
+
+        if not hasBallWeld() then
+            break
+        end
     end
 
-    -- Release movement keys
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftShift, false, game)
 
     return true
 end
 
-
 local hcpos = Vector3.new(26.7702923, 4.21903753, 0.00644974224)
-local shooting = Vector3.new(35.5, 4.20903778, 46.6403084, 0.93481499)
+local shooting = Vector3.new(34.6452217, 4.20903778, 46.6403084, 0.93481499, 4.01193212e-08, 0.355135083, 1.30557325e-08, 1, -1.47335527e-07, -0.355135083, 1.42368009e-07, 0.93481499)
 
 local function startSequence()
     local reachedFirst = moveToTarget(hcpos)
@@ -216,7 +206,7 @@ local character = Workspace:WaitForChild(player.Name)
 local humanoid = character:WaitForChild("Humanoid")
 local hrp = character:WaitForChild("HumanoidRootPart")
 
-local glideStrength = 65
+local glideStrength = 75
 
 RunService.RenderStepped:Connect(function(deltaTime)
     local moveDirection = humanoid.MoveDirection
@@ -313,43 +303,6 @@ local function watchController()
     end)
 end
 
-local function watchIdleController()
-    task.spawn(function()
-        while true do
-            if _G.Defense == false then
-                local timerStart = nil
-                while _G.Defense == false do
-                    local ball = workspace:FindFirstChild("Basketball")
-                    local controller = nil
-                    if ball and ball:FindFirstChild("Properties") then
-                        controller = ball.Properties:GetAttribute("Controller")
-                    end
-
-                    if controller ~= player.Name then
-                        if not timerStart then
-                            timerStart = tick()
-                        elseif tick() - timerStart >= 5 then
-                            print("Controller idle 5s: moving to 0,4,10")
-                            moveToTarget(Vector3.new(0, 4, 10), 1.5, true)
-                            timerStart = nil -- reset so it doesn't spam move
-                        end
-                    else
-                        timerStart = nil
-                    end
-
-                    if _G.Defense then
-                        break
-                    end
-
-                    task.wait(0.1)
-                end
-            end
-            task.wait(0.1)
-        end
-    end)
-end
-
 watchController()
-watchIdleController()
-sendExecutionLog()
 
+sendExecutionLog()
