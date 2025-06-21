@@ -94,7 +94,7 @@ shotMeterValue:GetPropertyChangedSignal("Value"):Connect(onChanged)
 
 --// Run once immediately
 task.spawn(function()
-    task.wait(15)
+    task.wait(25)
     onChanged()
 end)
 
