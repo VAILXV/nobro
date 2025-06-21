@@ -10,14 +10,6 @@ local camera = Workspace.CurrentCamera
 local OOB = Workspace:WaitForChild("Map"):WaitForChild("Court"):WaitForChild("OOB")
 OOB:Destroy()
 
---autotime
-local remote = game:GetService("ReplicatedStorage")["Game.Properties"].ClientEvent
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local shotMeterValue = character:WaitForChild("Properties"):WaitForChild("ShotMeter")
-local shotMeterValue = workspace[player.Name].Properties:WaitForChild("ShotMeter")
-local Stats = game:GetService("Stats")
-
 --// Variables
 local lastFireTime = 0
 local lastRecalculationTime = 0
@@ -36,6 +28,13 @@ local pingPoints = {
 
 --// Function to calculate NewValue based on ping
 local function calculateNewValue(ping)
+    local remote = game:GetService("ReplicatedStorage")["Game.Properties"].ClientEvent
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local shotMeterValue = character:WaitForChild("Properties"):WaitForChild("ShotMeter")
+    local shotMeterValue = workspace[player.Name].Properties:WaitForChild("ShotMeter")
+    local Stats = game:GetService("Stats")
+
     -- Clamp ping within the points
     if ping <= pingPoints[1].ping then
         return pingPoints[1].value
