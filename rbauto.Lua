@@ -86,6 +86,7 @@ shotMeterValue:GetPropertyChangedSignal("Value"):Connect(onChanged)
 
 --// Run once immediately
 wait(15)
+
 onChanged()
 
 local VirtualInputManager = game:GetService("VirtualInputManager")
