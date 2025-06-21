@@ -113,7 +113,7 @@ local function spamQuickChat()
     ReplicatedStorage:WaitForChild("Game.Properties"):WaitForChild("ClientEvent"):FireServer(unpack(args))
 end
 
-local function moveToTarget(targetPosition, customStopDistance)
+local function moveToTarget(targetPosition, customStopDistance, skipBallCheck)
     local hrp = getHRP()
     if not hrp then
         return false
@@ -131,7 +131,8 @@ local function moveToTarget(targetPosition, customStopDistance)
 
         RunService.Heartbeat:Wait()
 
-        if not hasBallWeld() then
+        -- ⛔ Break if no ball, unless we're skipping this check
+        if not skipBallCheck and not hasBallWeld() then
             break
         end
     end
