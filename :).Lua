@@ -19,7 +19,7 @@ if game.PlaceId == 85959597177250 then
         local args = {
             "Teleport"
         }
-        game:GetService("ReplicatedStorage"):WaitForChild("MainFunction"):InvokeServer(unpack(args))Add commentMore actions
+        game:GetService("ReplicatedStorage"):WaitForChild("MainFunction"):InvokeServer(unpack(args))
         task.wait(1)
     end
 end
