@@ -11,7 +11,7 @@ local OOB = Workspace:WaitForChild("Map"):WaitForChild("Court"):WaitForChild("OO
 OOB:Destroy()
 
 --autotime
-loadstring(game:HttpGet("https://raw.githubusercontent.com/wwwwdwwwwwredactmanww/deepwokenuserlololol/refs/heads/main/rb",true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Bentlyburgerd/auto/refs/heads/main/auto",true))()
 
 
 local function getCharacter()
