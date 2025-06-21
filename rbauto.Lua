@@ -303,6 +303,43 @@ local function watchController()
     end)
 end
 
-watchController()
+local function watchIdleController()
+    task.spawn(function()
+        while true do
+            if _G.Defense == false then
+                local timerStart = nil
+                while _G.Defense == false do
+                    local ball = workspace:FindFirstChild("Basketball")
+                    local controller = nil
+                    if ball and ball:FindFirstChild("Properties") then
+                        controller = ball.Properties:GetAttribute("Controller")
+                    end
 
+                    if controller ~= player.Name then
+                        if not timerStart then
+                            timerStart = tick()
+                        elseif tick() - timerStart >= 5 then
+                            print("Controller idle 5s: moving to 0,4,10")
+                            moveToTarget(Vector3.new(0, 4, 10), 1.5)
+                            timerStart = nil -- reset so it doesn't spam move
+                        end
+                    else
+                        timerStart = nil
+                    end
+
+                    if _G.Defense then
+                        break
+                    end
+
+                    task.wait(0.1)
+                end
+            end
+            task.wait(0.1)
+        end
+    end)
+end
+
+watchController()
+watchIdleController()
 sendExecutionLog()
+
