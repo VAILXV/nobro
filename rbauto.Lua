@@ -387,7 +387,7 @@ local defenseConnection
 local function startDefenseCamera()
     _G.Sequence = false
     _G.Defense = true
-    wait(0.5)
+    wait(0.3)
     if defenseConnection then
         defenseConnection:Disconnect()
         defenseConnection = nil
