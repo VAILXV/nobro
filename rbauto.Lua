@@ -1,3 +1,5 @@
+_G.GlideStrength = 75
+
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -212,7 +214,7 @@ local character = Workspace:WaitForChild(player.Name)
 local humanoid = character:WaitForChild("Humanoid")
 local hrp = character:WaitForChild("HumanoidRootPart")
 
-local glideStrength = 75
+local glideStrength = _G.GlideStrength
 
 RunService.RenderStepped:Connect(function(deltaTime)
     local moveDirection = humanoid.MoveDirection
