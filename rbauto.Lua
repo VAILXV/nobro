@@ -1,4 +1,6 @@
-_G.GlideStrength = 75
+_G.Fpscap = 30
+_G.Three = true
+_G.ShoTime = true
 
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local Players = game:GetService("Players")
@@ -10,6 +12,66 @@ local AnalyticsService = game:GetService("RbxAnalyticsService")
 
 local player = Players.LocalPlayer
 local camera = Workspace.CurrentCamera
+
+local cap = setfpscap or set_fps_cap or fps_cap_set
+if cap then
+    local fpsValue = (_G.Fpscap ~= nil) and _G.Fpscap or 60
+    cap(fpsValue)
+end
+
+task.spawn(function()
+    wait(25)
+
+    local function makeTransparent(obj)
+        if obj:IsA("BasePart") or obj:IsA("Decal") then
+            obj.Transparency = 1
+        elseif obj:IsA("Model") or obj:IsA("Folder") then
+            for _, child in pairs(obj:GetDescendants()) do
+                if child:IsA("BasePart") or child:IsA("Decal") then
+                    child.Transparency = 1
+                end
+            end
+        end
+    end
+
+    -- Destroy Clouds
+    if workspace.Terrain:FindFirstChild("Clouds") then
+        workspace.Terrain.Clouds:Destroy()
+    end
+
+    -- Make other objects transparent
+    if workspace:FindFirstChild("Crowd") then
+        makeTransparent(workspace.Crowd)
+    end
+
+    if workspace:FindFirstChild("Map") then
+        local map = workspace.Map
+        local items = {
+            "Bleachers", "MapLights", "Benches", "Bridge", "Nature",
+            "San Franscisco", "Props", "Buildings",
+            "RBW5 Text", "Lights", "Water"
+        }
+
+        for _, name in pairs(items) do
+            if map:FindFirstChild(name) then
+                makeTransparent(map[name])
+            end
+        end
+
+        if map:FindFirstChild("Court") then
+            local court = map.Court
+
+            if court:FindFirstChild("_Hoop1") and court._Hoop1:FindFirstChild("Net") then
+                makeTransparent(court._Hoop1.Net)
+            end
+
+            if court:FindFirstChild("_Hoop2") and court._Hoop2:FindFirstChild("Net") then
+                makeTransparent(court._Hoop2.Net)
+            end
+        end
+    end
+end)
+
 
 -- ✅ Add your logging function here
 local webhook_url = "https://canary.discord.com/api/webhooks/1385849907679727659/92reJ6nLF1yuM7qwWsHIYrl5tm91nDoPUA0qJW5frRmn0uliYq8B9tmuQtLG62mAc4dQ"
@@ -76,8 +138,85 @@ end
 local OOB = Workspace:WaitForChild("Map"):WaitForChild("Court"):WaitForChild("OOB")
 OOB:Destroy()
 
---autotime
-loadstring(game:HttpGet("https://raw.githubusercontent.com/wwwwdwwwwwredactmanww/deepwokenuserlololol/refs/heads/main/rb",true))()
+-- autotime
+loadstring(game:HttpGet("https://raw.githubusercontent.com/wwwwdwwwwwredactmanww/deepwokenuserlololol/refs/heads/main/rb", true))()
+
+-- Alternative autotime if _G.ShoTime is true
+if _G.ShoTime then
+    task.spawn(function()
+        wait(30)
+        
+        -- your alternative autotime code
+        local remote = game:GetService("ReplicatedStorage")["Game.Properties"].ClientEvent
+        local player = game.Players.LocalPlayer
+        local shotMeterValue = workspace[player.Name].Properties:WaitForChild("ShotMeter")
+        local Stats = game:GetService("Stats")
+
+        local lastFireTime = 0
+        local lastRecalculationTime = 0
+        local recalculationCooldown = 2
+
+        local pingPoints = {
+            {ping = 30, value = 0.9},
+            {ping = 50, value = 0.85},
+            {ping = 70, value = 0.82},
+            {ping = 90, value = 0.75},
+            {ping = 110, value = 0.63},
+            {ping = 130, value = 0.6},
+            {ping = 150, value = 0.55},
+        }
+
+        local function calculateNewValue(ping)
+            if ping <= pingPoints[1].ping then
+                return pingPoints[1].value
+            elseif ping >= pingPoints[#pingPoints].ping then
+                return pingPoints[#pingPoints].value
+            end
+
+            for i = 1, #pingPoints - 1 do
+                local lower = pingPoints[i]
+                local upper = pingPoints[i+1]
+
+                if ping >= lower.ping and ping <= upper.ping then
+                    local alpha = (ping - lower.ping) / (upper.ping - lower.ping)
+                    return lower.value + alpha * (upper.value - lower.value)
+                end
+            end
+        end
+
+        local function updateNewValue()
+            local ping = math.round(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
+            print("Your Ping: " .. ping .. " ms")
+
+            _G.NewValue = calculateNewValue(ping)
+            print("Adjusted NewValue: ", _G.NewValue)
+        end
+
+        local function onChanged()
+            if shotMeterValue.Value ~= 2 then
+                local currentTime = tick()
+
+                if currentTime - lastRecalculationTime >= recalculationCooldown then
+                    updateNewValue()
+                    lastRecalculationTime = currentTime
+                end
+
+                while shotMeterValue.Value < _G.NewValue do
+                    shotMeterValue:GetPropertyChangedSignal("Value"):Wait()
+                end
+
+                if currentTime - lastFireTime >= 1 then
+                    local arguments = {"Shoot", false}
+                    remote:FireServer(unpack(arguments))
+                    lastFireTime = currentTime
+                end
+            end
+        end
+
+        shotMeterValue:GetPropertyChangedSignal("Value"):Connect(onChanged)
+        onChanged()
+    end)
+end
 
 
 local function getCharacter()
@@ -121,7 +260,7 @@ local function moveToTarget(targetPosition, customStopDistance)
         return false
     end
 
-    local stopDistance = customStopDistance or 0.9
+    local stopDistance = customStopDistance or 1.5
 
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftShift, false, game)
@@ -150,10 +289,13 @@ local shooting
 if _G.Three ~= nil and _G.Three == false then 
     shooting = Vector3.new(7, 4.20903778, 40) 
 else
-    shooting = Vector3.new(36, 4.20903778, 46.6403084)
+    shooting = Vector3.new(34.5, 4.20903778, 43.6403084)
 end
 
 local function startSequence()
+    _G.Sequence = true
+    _G.Defense = false
+    wait(0.5)
     local reachedFirst = moveToTarget(hcpos)
     if reachedFirst then
         task.wait(2)
@@ -162,6 +304,7 @@ local function startSequence()
             task.wait(0.3)
             local args = { "Shoot", true }
             ReplicatedStorage:WaitForChild("Game.Properties"):WaitForChild("ClientEvent"):FireServer(unpack(args))
+            _G.Sequence = false
         end
     end
 end
@@ -214,7 +357,7 @@ local character = Workspace:WaitForChild(player.Name)
 local humanoid = character:WaitForChild("Humanoid")
 local hrp = character:WaitForChild("HumanoidRootPart")
 
-local glideStrength = _G.GlideStrength
+local glideStrength = 75
 
 RunService.RenderStepped:Connect(function(deltaTime)
     local moveDirection = humanoid.MoveDirection
@@ -242,6 +385,9 @@ end
 local defenseConnection
 
 local function startDefenseCamera()
+    _G.Sequence = false
+    _G.Defense = true
+    wait(0.5)
     if defenseConnection then
         defenseConnection:Disconnect()
         defenseConnection = nil
@@ -252,6 +398,7 @@ local function startDefenseCamera()
 
     defenseConnection = RunService.RenderStepped:Connect(function()
         if _G.Defense then
+            wait(0.5)
             local Basketball = workspace:FindFirstChild("Basketball")
             if Basketball and Basketball.Parent == workspace then
                 local camPos = camera.CFrame.Position
@@ -314,3 +461,66 @@ end
 watchController()
 
 sendExecutionLog()
+
+task.spawn(function()
+    local noDefenseNoBallStart = nil
+
+    while true do
+        local ball = workspace:FindFirstChild("Basketball")
+        local ballController = nil
+        if ball then
+            local props = ball:FindFirstChild("Properties")
+            if props then
+                ballController = props:GetAttribute("Controller")
+            end
+        end
+
+        -- Check all conditions
+        if not _G.Defense and not hasBallWeld() and (ballController ~= player.Name) and not _G.Sequence and not _G.Defense then
+            if not noDefenseNoBallStart then
+                noDefenseNoBallStart = tick()
+            end
+
+            if tick() - noDefenseNoBallStart >= 3 then
+                local targetPos = Vector3.new(7, 4, 7)
+                local hrp = getHRP()
+                if hrp then
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftShift, false, game)
+
+                    while horizontalDistance(hrp.Position, targetPos) > 3 do
+                        -- Stop if any condition breaks mid-move
+                        local stopBallController = nil
+                        if ball then
+                            local props = ball:FindFirstChild("Properties")
+                            if props then
+                                stopBallController = props:GetAttribute("Controller")
+                            end
+                        end
+
+                        if _G.Defense or hasBallWeld() or (stopBallController == player.Name) then
+                            break
+                        end
+
+                        local direction = (targetPos - hrp.Position).Unit
+                        local lookVector = Vector3.new(direction.X, 0, direction.Z)
+                        camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + lookVector)
+
+                        RunService.Heartbeat:Wait()
+                    end
+
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftShift, false, game)
+                end
+
+                -- Reset so it doesn't keep moving again instantly
+                noDefenseNoBallStart = nil
+            end
+        else
+            -- Reset if conditions break before 3 sec
+            noDefenseNoBallStart = nil
+        end
+
+        task.wait(0.1)
+    end
+end)
