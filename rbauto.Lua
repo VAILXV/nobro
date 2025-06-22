@@ -143,8 +143,7 @@ local function moveToTarget(targetPosition, customStopDistance)
 end
 
 local hcpos = Vector3.new(26.7702923, 4.21903753, 0.00644974224)
-local shooting = Vector3.new(34.6452217, 4.20903778, 46.6403084, 0.93481499, 4.01193212e-08, 0.355135083, 1.30557325e-08, 1, -1.47335527e-07, -0.355135083, 1.42368009e-07, 0.93481499)
-
+local shooting = Vector3.new(36, 4.20903778, 46.6403084)
 local function startSequence()
     local reachedFirst = moveToTarget(hcpos)
     if reachedFirst then
