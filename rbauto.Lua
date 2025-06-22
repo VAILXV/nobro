@@ -146,7 +146,7 @@ local hcpos = Vector3.new(26.7702923, 4.21903753, 0.00644974224)
 
 local shooting
 if _G.Three ~= nil and _G.Three == false then 
-    shooting = Vector3.new(5, 4.20903778, 42) 
+    shooting = Vector3.new(7, 4.20903778, 40) 
 else
     shooting = Vector3.new(36, 4.20903778, 46.6403084)
 end
