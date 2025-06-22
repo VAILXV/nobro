@@ -144,7 +144,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/wwwwdwwwwwredactmanww
 -- Alternative autotime if _G.ShoTime is true
 if _G.ShoTime then
     task.spawn(function()
-        wait(30)
+        wait(26)
         
         -- your alternative autotime code
         local remote = game:GetService("ReplicatedStorage")["Game.Properties"].ClientEvent
