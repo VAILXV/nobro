@@ -1,7 +1,3 @@
-_G.Fpscap = 30
-_G.Three = true
-_G.ShoTime = true
-
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
