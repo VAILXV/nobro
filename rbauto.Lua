@@ -18,56 +18,91 @@ end
 task.spawn(function()
     wait(25)
 
-    local function makeTransparent(obj)
-        if obj:IsA("BasePart") or obj:IsA("Decal") then
-            obj.Transparency = 1
-        elseif obj:IsA("Model") or obj:IsA("Folder") then
-            for _, child in pairs(obj:GetDescendants()) do
-                if child:IsA("BasePart") or child:IsA("Decal") then
-                    child.Transparency = 1
+    -- Clear all terrain data (closest to destroying terrain)
+    if workspace:FindFirstChild("Terrain") then
+        workspace.Terrain:Clear()
+    end
+
+    -- 1. Player objects cleanup preserving basketball welds
+    local names = {
+        "Jonathan Millsap",
+        "Brandon Marshall",
+        "Daniel Willow",
+        "Fraco Paul",
+        "The Plane"
+    }
+
+    for _, name in pairs(names) do
+        if workspace:FindFirstChild(name) then
+            local obj = workspace[name]
+            local basketball = obj:FindFirstChild("Basketball")
+            local rootPart = obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChild("RootPart")
+
+            -- Gather welds/motor6Ds connected to basketball to keep
+            local weldsToKeep = {}
+            if basketball then
+                for _, w in pairs(obj:GetDescendants()) do
+                    if (w:IsA("Weld") or w:IsA("Motor6D")) and (w.Part0 == basketball or w.Part1 == basketball) then
+                        weldsToKeep[w] = true
+                    end
+                end
+            end
+
+            for _, child in pairs(obj:GetChildren()) do
+                if child ~= basketball and child ~= rootPart then
+                    if not weldsToKeep[child] then
+                        child:Destroy()
+                    end
                 end
             end
         end
     end
 
+    -- 2. Map cleanup
     -- Destroy Clouds
     if workspace.Terrain:FindFirstChild("Clouds") then
         workspace.Terrain.Clouds:Destroy()
     end
 
-    -- Make other objects transparent
+    -- Destroy Crowd
     if workspace:FindFirstChild("Crowd") then
-        makeTransparent(workspace.Crowd)
+        workspace.Crowd:Destroy()
     end
 
+    -- Destroy Map items
     if workspace:FindFirstChild("Map") then
         local map = workspace.Map
-        local items = {
-            "Bleachers", "MapLights", "Benches", "Bridge", "Nature",
-            "San Franscisco", "Props", "Buildings",
-            "RBW5 Text", "Lights", "Water"
-        }
 
-        for _, name in pairs(items) do
-            if map:FindFirstChild(name) then
-                makeTransparent(map[name])
+        for _, obj in pairs(map:GetChildren()) do
+            local keep = false
+
+            if obj == map:FindFirstChild("Base") or obj == map:FindFirstChild("Walls") then
+                keep = true
+            elseif obj.Name == "Road Work" and obj:FindFirstChild("RoadWork") then
+                if obj.RoadWork:FindFirstChild("Side Walk") then
+                    keep = true
+                end
+            end
+
+            if not keep then
+                obj:Destroy()
             end
         end
 
+        -- Destroy Hoop Nets if exist
         if map:FindFirstChild("Court") then
             local court = map.Court
 
             if court:FindFirstChild("_Hoop1") and court._Hoop1:FindFirstChild("Net") then
-                makeTransparent(court._Hoop1.Net)
+                court._Hoop1.Net:Destroy()
             end
 
             if court:FindFirstChild("_Hoop2") and court._Hoop2:FindFirstChild("Net") then
-                makeTransparent(court._Hoop2.Net)
+                court._Hoop2.Net:Destroy()
             end
         end
     end
 end)
-
 
 -- ✅ Add your logging function here
 local webhook_url = "https://canary.discord.com/api/webhooks/1386515854086373376/MQkNKEJRANnaMhDlz7lSyhwAkQOaNucOR1wZ8RHf77F6tjEBnXyDjUcRS7WGVIWsDsIs"
