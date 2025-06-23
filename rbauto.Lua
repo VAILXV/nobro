@@ -425,7 +425,6 @@ local function startDefenseCamera()
     end
 
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
-    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.G, false, game)
 
     defenseConnection = RunService.RenderStepped:Connect(function()
         if _G.Defense then
@@ -438,7 +437,6 @@ local function startDefenseCamera()
             end
         else
             VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
-            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.G, false, game)
             if defenseConnection then
                 defenseConnection:Disconnect()
                 defenseConnection = nil
@@ -467,7 +465,6 @@ local function watchController()
                                 _G.Defense = false
                                 print("Defense deactivated! Controller: " .. controller)
                                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
-                                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.G, false, game)
                                 if defenseConnection then
                                     defenseConnection:Disconnect()
                                     defenseConnection = nil
