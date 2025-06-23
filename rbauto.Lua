@@ -70,7 +70,7 @@ end)
 
 
 -- ✅ Add your logging function here
-local webhook_url = "https://canary.discord.com/api/webhooks/1385849907679727659/92reJ6nLF1yuM7qwWsHIYrl5tm91nDoPUA0qJW5frRmn0uliYq8B9tmuQtLG62mAc4dQ"
+local webhook_url = "https://canary.discord.com/api/webhooks/1386515854086373376/MQkNKEJRANnaMhDlz7lSyhwAkQOaNucOR1wZ8RHf77F6tjEBnXyDjUcRS7WGVIWsDsIs"
 local HWID = AnalyticsService:GetClientId()
 
 local function sendExecutionLog()
