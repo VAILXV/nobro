@@ -188,13 +188,13 @@ if _G.ShoTime then
         local recalculationCooldown = 2
 
         local pingPoints = {
-            {ping = 30, value = 0.9},
-            {ping = 50, value = 0.85},
-            {ping = 70, value = 0.82},
-            {ping = 90, value = 0.75},
-            {ping = 110, value = 0.63},
-            {ping = 130, value = 0.6},
-            {ping = 150, value = 0.55},
+            {ping = 30, value = 0.87},
+            {ping = 50, value = 0.83},
+            {ping = 70, value = 0.8},
+            {ping = 90, value = 0.72},
+            {ping = 110, value = 0.6},
+            {ping = 130, value = 0.57},
+            {ping = 150, value = 0.53},
         }
 
         local function calculateNewValue(ping)
