@@ -557,10 +557,14 @@ if _G.Conquer == false or _G.Conquer == nil then
 else
     if game.PlaceId == 15800296330 then
         local player = game:GetService("Players").LocalPlayer
-        local list = player.PlayerGui.MenuUI.Conquer.Canvas.List
-        
+        local playerGui = player:WaitForChild("PlayerGui")
+        local menuUI = playerGui:WaitForChild("MenuUI")
+        local conquer = menuUI:WaitForChild("Conquer")
+        local canvas = conquer:WaitForChild("Canvas")
+        local list = canvas:WaitForChild("List")
+    
         local names = { "The Plane", "The Skyscraper", "The Rookie", "Bulldogs", "Bulls", "Aviators" }
-        
+    
         local function allObjectivesVisible(name)
             local group = list:FindFirstChild(name)
             if not group then return false end
@@ -568,7 +572,7 @@ else
             if not content then return false end
             local objectives = content:FindFirstChild("Objectives")
             if not objectives then return false end
-        
+    
             for i = 1, 3 do
                 local obj = objectives:FindFirstChild("Objective"..i)
                 if not obj then return false end
@@ -576,15 +580,15 @@ else
                 if not completed then return false end
                 local icon = completed:FindFirstChild("Icon")
                 if not icon then return false end
-        
+    
                 if not icon.Visible then
                     return false
                 end
             end
-        
+    
             return true
         end
-        
+    
         -- Find first incomplete group
         local firstIncompleteGroup
         for i = 1, #names do
@@ -593,7 +597,7 @@ else
                 break
             end
         end
-        
+    
         if not firstIncompleteGroup then
             firstIncompleteGroup = "The Plane"
         end
@@ -615,7 +619,7 @@ else
             }
         end
     
-        local slot = _G.Slot  -- Uses the global slot value
+        local slot = _G.Slot
         local args = {
             "Play Conquer",
             {
