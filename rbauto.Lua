@@ -23,35 +23,36 @@ task.spawn(function()
         workspace.Terrain:Clear()
     end
 
-    -- 1. Player objects cleanup preserving basketball welds
-    local names = {
-        "Jonathan Millsap",
-        "Brandon Marshall",
-        "Daniel Willow",
-        "Fraco Paul",
-        "The Plane"
-    }
+    if _G.ClearPlayers ~= nil and _G.ClearPlayers == true then
+        local names = {
+            "Jonathan Millsap",
+            "Brandon Marshall",
+            "Daniel Willow",
+            "Fraco Paul",
+            "The Plane"
+        }
 
-    for _, name in pairs(names) do
-        if workspace:FindFirstChild(name) then
-            local obj = workspace[name]
-            local basketball = obj:FindFirstChild("Basketball")
-            local rootPart = obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChild("RootPart")
+        for _, name in pairs(names) do
+            if workspace:FindFirstChild(name) then
+                local obj = workspace[name]
+                local basketball = obj:FindFirstChild("Basketball")
+                local rootPart = obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChild("RootPart")
 
-            -- Gather welds/motor6Ds connected to basketball to keep
-            local weldsToKeep = {}
-            if basketball then
-                for _, w in pairs(obj:GetDescendants()) do
-                    if (w:IsA("Weld") or w:IsA("Motor6D")) and (w.Part0 == basketball or w.Part1 == basketball) then
-                        weldsToKeep[w] = true
+                -- Gather welds/motor6Ds connected to basketball to keep
+                local weldsToKeep = {}
+                if basketball then
+                    for _, w in pairs(obj:GetDescendants()) do
+                        if (w:IsA("Weld") or w:IsA("Motor6D")) and (w.Part0 == basketball or w.Part1 == basketball) then
+                            weldsToKeep[w] = true
+                        end
                     end
                 end
-            end
 
-            for _, child in pairs(obj:GetChildren()) do
-                if child ~= basketball and child ~= rootPart then
-                    if not weldsToKeep[child] then
-                        child:Destroy()
+                for _, child in pairs(obj:GetChildren()) do
+                    if child ~= basketball and child ~= rootPart then
+                        if not weldsToKeep[child] then
+                            child:Destroy()
+                        end
                     end
                 end
             end
