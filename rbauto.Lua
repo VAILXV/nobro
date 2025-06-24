@@ -555,6 +555,88 @@ if _G.Conquer == false or _G.Conquer == nil then
         end
     end)
 else
+    if game.PlaceId == 15800296330 then
+        local player = game:GetService("Players").LocalPlayer
+        local list = player.PlayerGui.MenuUI.Conquer.Canvas.List
+        
+        local names = { "The Plane", "The Skyscraper", "The Rookie", "Bulldogs", "Bulls", "Aviators" }
+        
+        local function allObjectivesVisible(name)
+            local group = list:FindFirstChild(name)
+            if not group then return false end
+            local content = group:FindFirstChild("Content")
+            if not content then return false end
+            local objectives = content:FindFirstChild("Objectives")
+            if not objectives then return false end
+        
+            for i = 1, 3 do
+                local obj = objectives:FindFirstChild("Objective"..i)
+                if not obj then return false end
+                local completed = obj:FindFirstChild("Completed")
+                if not completed then return false end
+                local icon = completed:FindFirstChild("Icon")
+                if not icon then return false end
+        
+                if not icon.Visible then
+                    return false
+                end
+            end
+        
+            return true
+        end
+        
+        -- Find first incomplete group
+        local firstIncompleteGroup
+        for i = 1, #names do
+            if not allObjectivesVisible(names[i]) then
+                firstIncompleteGroup = names[i]
+                break
+            end
+        end
+        
+        if not firstIncompleteGroup then
+            firstIncompleteGroup = "The Plane"
+        end
+    
+        task.wait(1)
+    
+        local teamPlayers
+        if firstIncompleteGroup == "Bulldogs" or firstIncompleteGroup == "Bulls" or firstIncompleteGroup == "Aviators" then
+            teamPlayers = {
+                "Brandon Marshall",
+                "Fraco Paul",
+                "The Plane",
+                "Jeff Hayward"
+            }
+        else
+            teamPlayers = {
+                "Brandon Marshall",
+                "Fraco Paul"
+            }
+        end
+    
+        local slot = _G.Slot  -- Uses the global slot value
+        local args = {
+            "Play Conquer",
+            {
+                Team = teamPlayers,
+                Game = firstIncompleteGroup,
+                Slot = slot
+            }
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("MainFunction"):InvokeServer(unpack(args))
+    end
+    
+    if game.PlaceId == 85959597177250 then
+        while true do
+            local args = {
+                "Teleport"
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("MainFunction"):InvokeServer(unpack(args))
+            task.wait(1)
+        end
+    end
+
     wait(15)
 
     local VirtualInputManager = game:GetService("VirtualInputManager")
