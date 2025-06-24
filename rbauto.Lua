@@ -320,7 +320,7 @@ if _G.Conquer == false or _G.Conquer == nil then
     
     local shooting
     if _G.Three ~= nil and _G.Three == false then 
-        shooting = Vector3.new(7, 4.20903778, 40) 
+        shooting = Vector3.new(20, 4.20903778, 43) 
     else
         shooting = Vector3.new(34.5, 4.20903778, 43.6403084)
     end
