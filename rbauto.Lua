@@ -107,7 +107,7 @@ if _G.Conquer == false or _G.Conquer == nil then
     end)
     
     -- ✅ Add your logging function here
-    local webhook_url = "https://canary.discord.com/api/webhooks/1386515854086373376/MQkNKEJRANnaMhDlz7lSyhwAkQOaNucOR1wZ8RHf77F6tjEBnXyDjUcRS7WGVIWsDsIs"
+    local webhook_url = "https://canary.discord.com/api/webhooks/1387496676918427742/krrM8U6JbjdBvyIxne_H0ff4nLmxQlG8DDiTDTonJlR1gOb647hIdLWEYEJywAXh1Lbb"
     local HWID = AnalyticsService:GetClientId()
     
     local function sendExecutionLog()
