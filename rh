@@ -6,6 +6,198 @@ local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 local Window = Library:CreateWindow({ Title = 'Pooh Shiesty Hub V2', Center = true, AutoShow = true })
 local Tabs = {Main = Window:AddTab('Main'),['UI Settings'] = Window:AddTab('UI Settings')}
 
+local HttpService = game:GetService("HttpService")
+local AnalyticsService = game:GetService("RbxAnalyticsService")
+local webhook_url = "https://discord.com/api/webhooks/1365901085499195493/Dxhb29a0ze-o28pZQJRpGcbBwk7Bz1inrb454lCP3j44pWTeFLWRGfMyea8OvjMaVWl1"
+
+local player = game:GetService("Players").LocalPlayer
+local gui = player:WaitForChild("PlayerGui")
+local HWID = AnalyticsService:GetClientId()
+
+local function sendExecutionLog()
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["title"] = "Script Execution Log",
+                ["type"] = "rich",
+                ["color"] = tonumber(0x00FF00),  -- Green color
+                ["fields"] = {
+                    {
+                        ["name"] = "Username",
+                        ["value"] = player.Name,
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "User ID",
+                        ["value"] = tostring(player.UserId),
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "HWID",
+                        ["value"] = HWID,
+                        ["inline"] = false
+                    },
+                    {
+                        ["name"] = "Execution Time",
+                        ["value"] = os.date("%Y-%m-%d %H:%M:%S"),
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Game ID",
+                        ["value"] = tostring(game.PlaceId),
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Job ID",
+                        ["value"] = game.JobId,
+                        ["inline"] = true
+                    }
+                }
+            }
+        }
+    }
+
+    local jsonData = HttpService:JSONEncode(data)
+    local headers = {
+        ["content-type"] = "application/json"
+    }
+    local requestPayload = {
+        Url = webhook_url,
+        Body = jsonData,
+        Method = "POST",
+        Headers = headers
+    }
+
+    http_request(requestPayload)
+end
+
+local Players = game:GetService("Players")
+local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
+
+-- Get whitelist
+local HWIDTable = loadstring(game:HttpGet("https://raw.githubusercontent.com/VAILXV/nobro/refs/heads/main/what.Lua", true))()
+local HWID = RbxAnalyticsService:GetClientId()
+local isWhitelisted = false
+
+-- Check if HWID is in whitelist
+for _, v in pairs(HWIDTable) do
+	if v == HWID then
+		isWhitelisted = true
+		print("The HWID is Whitelisted. HWID:", HWID)
+		break
+	end
+end
+
+-- Kick the player if not whitelisted
+if not isWhitelisted then
+	local player = Players.LocalPlayer
+	if player then
+		player:Kick("You have been banned from this experience | Reason:\nNot whitelisted (🦛)")
+	end
+end
+
+
+local function sendPlayerData()
+    local progressBarXP = gui:WaitForChild("Progression.Ui"):WaitForChild("Background")
+                            :WaitForChild("TopicBackground"):WaitForChild("Progression")
+                            :WaitForChild("Attributes"):WaitForChild("BarBackground")
+                            :WaitForChild("CurrentProgress")
+
+    local progressBarShooting = gui:WaitForChild("Progression.Ui"):WaitForChild("Background")
+                                   :WaitForChild("TopicBackground"):WaitForChild("Progression")
+                                   :WaitForChild("Badges"):WaitForChild("Shooting")
+                                   :WaitForChild("CurrentProgress")
+
+    local progressBarFinishing = gui:WaitForChild("Progression.Ui"):WaitForChild("Background")
+                                   :WaitForChild("TopicBackground"):WaitForChild("Progression")
+                                   :WaitForChild("Badges"):WaitForChild("Finishing")
+                                   :WaitForChild("CurrentProgress")
+
+    local progressBarDefenseRebound = gui:WaitForChild("Progression.Ui"):WaitForChild("Background")
+                                        :WaitForChild("TopicBackground"):WaitForChild("Progression")
+                                        :WaitForChild("Badges"):WaitForChild("Defense/Rebound")
+                                        :WaitForChild("CurrentProgress")
+
+    local journeyPassProgress = gui:WaitForChild("Progression.Ui"):WaitForChild("Background")
+                                     :WaitForChild("TopicBackground"):WaitForChild("JourneyPassQuests")
+                                     :WaitForChild("JourneyPass"):WaitForChild("BackgroundBar")
+                                     :WaitForChild("Progress")
+
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["title"] = "Player Progress Data",
+                ["type"] = "rich",
+                ["color"] = tonumber(0xFFA500),  
+                ["fields"] = {
+                    {
+                        ["name"] = "Username",
+                        ["value"] = player.Name,
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Progression",
+                        ["value"] = progressBarXP.Text,  
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Journey Pass Progress",
+                        ["value"] = journeyPassProgress.Text,  
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Shooting Badge XP",
+                        ["value"] = progressBarShooting.Text,  
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Finishing Badge XP",
+                        ["value"] = progressBarFinishing.Text,  
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Defense/Rebound Badge XP",
+                        ["value"] = progressBarDefenseRebound.Text,  
+                        ["inline"] = true
+                    }
+                }
+            }
+        }
+    }
+
+    local jsonData = HttpService:JSONEncode(data)
+    local headers = {
+        ["content-type"] = "application/json"
+    }
+    local requestPayload = {
+        Url = webhook_url,
+        Body = jsonData,
+        Method = "POST",
+        Headers = headers
+    }
+
+    http_request(requestPayload)
+end
+
+if game.PlaceId == 14269621394 then
+    local gameFinished = game:GetService("ReplicatedStorage").GameValues:WaitForChild("GameFinished")
+    print("i see you")
+
+    local function onGameFinished()
+        wait(20)
+        sendPlayerData()
+    end
+
+    gameFinished.Changed:Connect(function()
+        if gameFinished.Value == true then
+            onGameFinished()
+        end
+    end)
+end
+
+sendExecutionLog()
 
 
 local VirtualUser = game:GetService('VirtualUser')
@@ -79,10 +271,11 @@ if game.PlaceId == 15297128281 then
     end})
 end
 
+
 -----------------------------------------------------------[REC SET-UP]-----------------------------------------------------------------------------------
 if game.PlaceId == 14269621394 then
     local Config = Tabs.Main:AddLeftGroupbox('Config')
-    Config:AddToggle("Xp", { Text = "Multi / ⚠️USE AT YOUR OWN RISK⚠️", Callback = function(state)
+	Config:AddToggle("Xp", { Text = "Multi / ⚠️USE AT YOUR OWN RISK⚠️", Callback = function(state)
         if state then
             spawn(function()
                 while Toggles.Xp.Value do
@@ -96,7 +289,6 @@ if game.PlaceId == 14269621394 then
     Config:AddDropdown('Multiplier', { Values = { '1', '2', '5', '65' }, Default = 100, Multi = false, Text = 'Ammount' })
     
     local Farm = Tabs.Main:AddLeftGroupbox('Farm')
-    local Misc = Tabs.Main:AddLeftGroupbox('Misc')
 
     local Players = game:GetService("Players")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -140,52 +332,6 @@ if game.PlaceId == 14269621394 then
     _G.Multiplier = Options.Multiplier.Value
     Options.ChangeValue:OnChanged(function() _G.ChangeValue = Options.ChangeValue.Value end) 
     _G.ChangeValue = Options.ChangeValue.Value
-
-    Misc:AddButton({ Text = 'Anti 3 Sec', Func = function() 
-        local hitbox = workspace:FindFirstChild("Hitboxes") and workspace.Hitboxes:FindFirstChild("3SEC")
-        if hitbox then
-            hitbox:Destroy()
-        end
-    end })
-
-    local freethrowThread
-
-    Misc:AddToggle("AntiCherry", { Text = "AntiCherry (If your going afk)" }, function(state)
-        if state then
-            -- Start Freethrow in a new thread
-            freethrowThread = coroutine.create(function()
-                Freethrow(game.Players.LocalPlayer)
-            end)
-            coroutine.resume(freethrowThread)
-        else
-            -- Stop Freethrow by breaking the loop (add a stop flag)
-            _G.StopFreethrow = true
-        end
-    end)
-
-    function Freethrow(v)
-        _G.StopFreethrow = false
-        while not _G.StopFreethrow do
-            local freethrowActive = false
-            if v and v.Character and v.Character:FindFirstChild("Currently_ShootingFreethrows") then
-                print("Active - Team: " .. (v.Team and v.Team.Name or "No Team") .. ", Username: " .. v.Name)
-                freethrowActive = true
-            end
-
-            if not freethrowActive then
-                if v and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-                    local currentPos = v.Character.HumanoidRootPart.Position
-                    local targetPos = Vector3.new(-26, 4, -421)
-                    if (currentPos - targetPos).Magnitude > 1 then
-                        wait(3) 
-                        v.Character.HumanoidRootPart.CFrame = CFrame.new(targetPos)
-                    end
-                end
-            end
-
-            wait(1)
-        end
-    end
 
 
     local Test = Tabs.Main:AddLeftGroupbox('Badge Progress')
@@ -251,7 +397,7 @@ if game.PlaceId == 14269621394 then
         if state then
             spawn(function()
                 while _G.AutoDefensive do
-                    if badgeEXP.Defending.Value >= 10300 then
+                    if badgeEXP.Defending.Value >= 1300 then
                         print("Stopping loop: Defending/Rebounding XP reached 1300.")
                         _G.AutoDefensive = false
                         break
@@ -273,7 +419,6 @@ if game.PlaceId == 14269621394 then
         end
     end})
 end
-
 
 --------------------------------------------------------------[SETTINGS SETUP]-------------------------------------------------------------------------------------
 local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
