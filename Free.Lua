@@ -48,7 +48,7 @@ local submitButton = createButton("SubmitButton", UDim2.new(0.1, 0, 0.3, 0), "Su
 local getKeyButton = createButton("GetKeyButton", UDim2.new(0.1, 0, 0.5, 0), "Get Key")
 local joinDiscordButton = createButton("JoinDiscordButton", UDim2.new(0.1, 0, 0.7, 0), "Join Discord")
  
-local correctKey = "6/23ape"
+local correctKey = "rahh92312gh"
  
 submitButton.MouseButton1Click:Connect(function()
     if keyBox.Text == correctKey then
