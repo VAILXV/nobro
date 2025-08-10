@@ -1,46 +1,10 @@
---// Services
-local Players = game:GetService("Players")
-local TeleportService = game:GetService("TeleportService")
-local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
-local LocalPlayer = Players.LocalPlayer
-
---// Load remote HWID table
-local HWIDTable = loadstring(game:HttpGet("https://raw.githubusercontent.com/Bentlyburgerd/hwid/refs/heads/main/hwidlist"))()
-
---// Get this player's HWID
-local HWID = RbxAnalyticsService:GetClientId()
-
---// Check if HWID is in whitelist
-local whitelisted = false
-for _, v in pairs(HWIDTable) do
-	if v == HWID then
-		whitelisted = true
-		break
-	end
-end
-
-if whitelisted then
-	print("✅ HWID is Whitelisted:", HWID)
-
-	-- 🔽 Your script starts here
-	-- Example:
-	print("Running rest of script...")
-
-	-- Add your actual code here
-
-else
-	warn("❌ HWID is NOT Whitelisted. Teleporting. HWID:", HWID)
-	TeleportService:Teleport(15800296330, LocalPlayer)
-	return -- ⛔ Stop the rest of the script
-end
-
 _G.GaurdDis = 7 
-_G.SprintDis = 10
+_G.SprintDis = 20
 _G.AutoBlock = false
 _G.Xoffball = 5
 _G.Yoffball = 3
 _G.BlockDelay = 0.75
-_G.WideOpenDist = 10
+_G.WideOpenDist = 7
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 wait(5)
