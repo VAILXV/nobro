@@ -151,12 +151,12 @@ end
 
 local function FindMostOpenPoint()
     local pointsTeam1 = {
-        Vector3.new(-35, 4, 47),
-        Vector3.new(35, 4, 47),
+        Vector3.new(-29, 4, 47),
+        Vector3.new(29, 4, 47),
     }
     local pointsTeam2 = {
-        Vector3.new(-35, 4, -47),
-        Vector3.new(35, 4, -47),
+        Vector3.new(-29, 4, -47),
+        Vector3.new(29, 4, -47),
     }
 
     local points = (localTeam == "Team1") and pointsTeam1 or pointsTeam2
