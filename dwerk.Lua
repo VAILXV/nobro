@@ -4,7 +4,7 @@ _G.AutoBlock = false
 _G.Xoffball = 5
 _G.Yoffball = 3
 _G.BlockDelay = 0.75
-_G.WideOpenDist = 7
+_G.WideOpenDist = 3
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 wait(5)
