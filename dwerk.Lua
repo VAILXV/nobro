@@ -6,6 +6,29 @@ _G.Yoffball = 3
 _G.BlockDelay = 0.75
 _G.WideOpenDist = 1
 
+if game.PlaceId == 85959597177250 then
+	local blacklistedUsers = {
+		["LockSharp"] = true,
+		["bigceuchie"] = true
+	}
+
+	local function isBlacklistedInServer()
+		for _, player in ipairs(game.Players:GetPlayers()) do
+			if blacklistedUsers[player.Name] then
+				return true
+			end
+		end
+		return false
+	end
+
+	if isBlacklistedInServer() then
+		task.wait(30)
+		for _, player in ipairs(game.Players:GetPlayers()) do
+			game:GetService("TeleportService"):Teleport(15800296330, player)
+		end
+	end
+end
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 wait(5)
 
