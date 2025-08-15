@@ -22,7 +22,7 @@ if game.PlaceId == 85959597177250 then
 	end
 
 	if isBlacklistedInServer() then
-		task.wait(30)
+		task.wait(45)
 		for _, player in ipairs(game.Players:GetPlayers()) do
 			game:GetService("TeleportService"):Teleport(15800296330, player)
 		end
