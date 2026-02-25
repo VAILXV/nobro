@@ -67,7 +67,7 @@ local CONFIG = {
     TIMING = false; -- true = green timing, false = mistime
 
     -- When TIMING=false, choose mistime flavor: `early` (release instantly) or `late` (hold long)
-    MISTIME = `early`;
+    MISTIME = `late`;
 
     -- When TIMING=true, this is the hold duration for a green release (seconds)
     TIMING_HOLD = 0.4;
