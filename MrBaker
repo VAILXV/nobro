@@ -4,7 +4,7 @@
 
 -- Alt leave timer (minutes). Allowed values: 2..10 (2, 3, 4, 5, 6, 7, 8, 9, 10)
 -- This controls how long the ALT stays in a game before returning to Lobby.
-local ALT_LEAVE_TIMER = 5 -- minutes
+local ALT_LEAVE_TIMER = 2 -- minutes
 
 -- Derived duration in seconds used by the in-game loop for the ALT
 local GAME_DURATION = ALT_LEAVE_TIMER * 60
@@ -61,13 +61,13 @@ local ALT_ACCOUNT_DATA = {
 -- Centralized behavior config so you only edit here
 local CONFIG = {
     -- MODE options: `FINISHING` | `DEFENDING` | `SHOOTING2` (mid/2s) | `SHOOTING3` (3s) | `PLAYMAKING`
-    MODE = `FINISHING`;
+    MODE = `DEFENDING`;
 
     -- TIMING behavior: true for good timing (~0.4s), false to intentionally mistime (early or late)
-    TIMING = true; -- true = green timing, false = mistime
+    TIMING = false; -- true = green timing, false = mistime
 
     -- When TIMING=false, choose mistime flavor: `early` (release instantly) or `late` (hold long)
-    MISTIME = `early`;
+    MISTIME = `late`;
 
     -- When TIMING=true, this is the hold duration for a green release (seconds)
     TIMING_HOLD = 0.4;
