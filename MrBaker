@@ -184,7 +184,7 @@ do
     end
 end
 
-local QUEUE_TIMEOUT = 30
+local QUEUE_TIMEOUT = 15
 local QUEUE_DELAY = 3
 
 -- Backwards compat alias (older code paths use this name); now driven by CONFIG.MODE
