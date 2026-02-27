@@ -24,8 +24,8 @@ end)
 -- Multi-mode controller: optionally chain two modes with a timer for the first phase
 local MULTI_MODE = {
     ENABLED = true;     -- set true to activate multi-mode sequencing
-    PRESET = 3;          -- 1..5 (see MULTI_MODE_PRESETS below)
-    FIRST_PHASE_MINUTES = 5; -- how long to run the first mode before switching (timer presets)
+    PRESET = 5;          -- 1..5 (see MULTI_MODE_PRESETS below)
+    FIRST_PHASE_MINUTES = 2; -- how long to run the first mode before switching (timer presets)
     FINISHING_REPS = 5;  -- used by preset 5: number of FINISHING reps before switching
 }
 
