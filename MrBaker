@@ -50,24 +50,24 @@ local MULTI_MODE_STATE = {
 -- Account slot picker: set build slots/usernames here for easy access
 local MAIN_ACCOUNT_DATA = {
     BUILD_SLOT = 2;
-    USER_NAME = `Goodgirl`;
+    USER_NAME = `wesley891`;
 }
 
 local ALT_ACCOUNT_DATA = {
     BUILD_SLOT = 1;
-    USER_NAME = `Blasted_Vipefish139`;
+    USER_NAME = `mybuh10`;
 }
 
 -- Centralized behavior config so you only edit here
 local CONFIG = {
     -- MODE options: `FINISHING` | `DEFENDING` | `SHOOTING2` (mid/2s) | `SHOOTING3` (3s) | `PLAYMAKING`
-    MODE = `SHOOTING2`;
+    MODE = `DEFENDING`;
 
     -- TIMING behavior: true for good timing (~0.4s), false to intentionally mistime (early or late)
-    TIMING = true; -- true = green timing, false = mistime
+    TIMING = false; -- true = green timing, false = mistime
 
     -- When TIMING=false, choose mistime flavor: `early` (release instantly) or `late` (hold long)
-    MISTIME = `late`;
+    MISTIME = `early`;
 
     -- When TIMING=true, this is the hold duration for a green release (seconds)
     TIMING_HOLD = 0.4;
@@ -184,7 +184,7 @@ do
     end
 end
 
-local QUEUE_TIMEOUT = 15
+local QUEUE_TIMEOUT = 30
 local QUEUE_DELAY = 3
 
 -- Backwards compat alias (older code paths use this name); now driven by CONFIG.MODE
