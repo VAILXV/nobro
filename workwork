@@ -64,7 +64,7 @@ local CONFIG = {
     MODE = `PLAYMAKING`;
 
     -- TIMING behavior: true for good timing (~0.4s), false to intentionally mistime (early or late)
-    TIMING = false; -- true = green timing, false = mistime
+    TIMING = true; -- true = green timing, false = mistime
 
     -- When TIMING=false, choose mistime flavor: `early` (release instantly) or `late` (hold long)
     MISTIME = `late`;
